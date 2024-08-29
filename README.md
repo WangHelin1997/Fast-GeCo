@@ -63,6 +63,7 @@ CUDA_VISIBLE_DEVICES=0 python eval-fastgeco.py
 ## Run baseline SepFormer
 
 We also provide codes to train and evaluate the SepFormer model, the same as in our paper.
+
 See [speechbrain](https://github.com/speechbrain) for more details of training and test.
 
 ## Citations & References
@@ -82,7 +83,11 @@ misc{wang2024noiserobustspeechseparationfast,
 
 
 ## Acknowledgement
+
 [1] [speechbrain](https://github.com/speechbrain)
+
 [2] [Conv-TasNet](https://github.com/JusperLee/Conv-TasNet)
+
 [3] [sgmse-bbed](https://github.com/sp-uhh/sgmse-bbed)
+
 [4] [sgmse-crp](https://github.com/sp-uhh/sgmse_crp)
