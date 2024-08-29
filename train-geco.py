@@ -5,7 +5,7 @@ import pytorch_lightning as pl
 from pytorch_lightning.plugins import DDPPlugin
 from pytorch_lightning.loggers import WandbLogger, TensorBoardLogger
 from pytorch_lightning.callbacks import ModelCheckpoint
-
+import wandb
 
 from geco.backbones.shared import BackboneRegistry
 from geco.data_module import SpecsDataModule
@@ -63,7 +63,8 @@ if __name__ == '__main__':
  
      if not args.nolog:
           #this needs to be changed accordingly to your wandb settings
-          logger = WandbLogger(project="newloss", entity = 'name_to_be_replaced', log_model=True, save_dir="logs")
+          wandb.login(key='YOUR KEY')
+          logger = WandbLogger(project="geco", log_model=True, save_dir="logs")
           logger.experiment.log_code(".")
           savedir_ck = f'./logs/{logger.version}' #change your folder, where to save files
           if not os.path.isdir(savedir_ck):
@@ -90,14 +91,14 @@ if __name__ == '__main__':
           trainer = pl.Trainer.from_argparse_args(
                arg_groups['pl.Trainer'],
                strategy=DDPPlugin(find_unused_parameters=False), logger=logger,
-               log_every_n_steps=10, num_sanity_val_steps=0,
+               log_every_n_steps=10, num_sanity_val_steps=0,max_epochs=20,
                callbacks=callbacks
           )
      else:
           trainer = pl.Trainer.from_argparse_args(
           arg_groups['pl.Trainer'],
           strategy=DDPPlugin(find_unused_parameters=False),
-          log_every_n_steps=10, num_sanity_val_steps=0
+          log_every_n_steps=10, num_sanity_val_steps=0,max_epochs=20,
      )
 
      # Train model

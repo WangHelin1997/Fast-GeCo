@@ -21,8 +21,8 @@ from utils import energy_ratios, ensure_dir, print_mean_std
 if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument("--destination_folder", type=str, default='test', help="Name of destination folder.")
-    parser.add_argument("--test_dir", type=str, default='./output-test', help='Directory containing the test data')
-    parser.add_argument("--ckpt", type=str, default='./lightning_logs/version_110981/checkpoints/epoch=3-step=6951.ckpt', help='Path to model checkpoint.')
+    parser.add_argument("--test_dir", type=str, default='/export/corpora7/HW/speechbrain/recipes/LibriMix/separation/2025/save/libri2mix-test', help='Directory containing the test data')
+    parser.add_argument("--ckpt", type=str, default='./logs/u0kwl5bj/epoch=13-si_sdr=8.10.ckpt', help='Path to model checkpoint.')
     parser.add_argument("--sampler_type", type=str, default="pc",
                         help="Specify the sampler type")
     parser.add_argument("--predictor", type=str,
@@ -45,9 +45,9 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    clean_files = sorted(glob(os.path.join(args.test_dir, '*_ref.wav')))
-    noisy_files = sorted(glob(os.path.join(args.test_dir, '*_pred.wav')))
     mixture_files = sorted(glob(os.path.join(args.test_dir, '*_mix.wav')))
+    noisy_files = [item.replace('_mix.wav', '_source1hatP.wav') for item in mixture_files]
+    clean_files = [item.replace('_mix.wav', '_source1.wav') for item in mixture_files]
     if args.debug:
         clean_files = clean_files[:2]
         noisy_files = noisy_files[:2]
@@ -63,7 +63,7 @@ if __name__ == '__main__':
     ensure_dir(target_dir + "files/")
 
     # Settings
-    sr = 16000
+    sr = 8000
     sampler_type = args.sampler_type
     N = args.N
     correct_stepsize = args.correct_stepsize
@@ -106,7 +106,7 @@ if __name__ == '__main__':
             m, sr_ = torchaudio.load(mixture_file)
             if sr_ != sr:
                 m = torchaudio.transforms.Resample(sr_, sr)(m)
-            print(x.shape,y.shape,m.shape)
+            # print(x.shape,y.shape,m.shape)
             min_leng = min(x.shape[-1],y.shape[-1],m.shape[-1])
             x = x[...,:min_leng]
             y = y[...,:min_leng]
@@ -126,14 +126,14 @@ if __name__ == '__main__':
             n = y - x
 
             # Write enhanced wav file
-            write(target_dir + "files/" + filename.split('_')[0] + '.wav', x_hat, 16000)
+            write(target_dir + "files/" + filename.split('_')[0] + '.wav', x_hat, 8000)
             shutil.copyfile(clean_file, target_dir + "files/" + filename.split('_')[0] + '_ref.wav')
-            shutil.copyfile(mixture_file, target_dir + "files/" + filename.split('_')[0] + '_pred.wav')
-            shutil.copyfile(noisy_file, target_dir + "files/" + filename.split('_')[0] + '_mix.wav')
+            shutil.copyfile(mixture_file, target_dir + "files/" + filename.split('_')[0] + '_mix.wav')
+            shutil.copyfile(noisy_file, target_dir + "files/" + filename.split('_')[0] + '_pred.wav')
             # Append metrics to data frame
             data["filename"].append(filename)
             try:
-                p = pesq(sr, x, x_hat, 'wb')
+                p = pesq(sr, x, x_hat, 'nb')
             except: 
                 p = float("nan")
             data["pesq"].append(p)

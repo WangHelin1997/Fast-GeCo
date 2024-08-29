@@ -134,7 +134,6 @@ class SDE(abc.ABC):
         pass
 
 
-#This is the SDE for the Brownian Bridge with Exploding Diffusion Coefficient. It uses the same parameterization as in the paper.
 @SDERegistry.register("bbed")
 class BBED(SDE):
     @staticmethod
@@ -142,7 +141,7 @@ class BBED(SDE):
         parser.add_argument("--sde-n", type=int, default=30, help="The number of timesteps in the SDE discretization. 30 by default")
         parser.add_argument("--T_sampling", type=float, default=0.999, help="The T so that t < T during sampling in the train step.")
         parser.add_argument("--k", type=float, default = 2.6, help="base factor for diffusion term") 
-        parser.add_argument("--theta", type=float, default = 0.51, help="root scale factor for diffusion term.")
+        parser.add_argument("--theta", type=float, default = 0.52, help="root scale factor for diffusion term.")
         return parser
 
     def __init__(self, T_sampling, k, theta, N=1000, **kwargs):
@@ -171,8 +170,6 @@ class BBED(SDE):
 
 
     def sde(self, x, t, y):
-        # if t == 1.:
-        #     t = 0.999
         drift = (y - x)/(self.Tc - t)
         sigma = (self.k) ** t
         diffusion = sigma * np.sqrt(self.theta)
@@ -186,8 +183,6 @@ class BBED(SDE):
 
     def _std(self, t):
         t_np = t.cpu().detach().numpy()
-        # if t_np == 1:
-        #     t_np = 0.999
         Eis = sc.expi(2*(t_np-1)*self.logk) - self.Eilog
         h = 2*self.k**2*self.logk
         var = (self.k**(2*t_np)-1+t_np) + h*(1-t_np)*Eis
@@ -203,7 +198,6 @@ class BBED(SDE):
         std = self._std(self.T*torch.ones((y.shape[0],), device=y.device))
         z = torch.randn_like(y)
         x_T = y + z * std[:, None, None, None]
-
         return x_T, z
 
     def prior_logp(self, z):

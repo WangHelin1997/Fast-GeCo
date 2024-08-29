@@ -24,7 +24,7 @@ class ScoreModel(pl.LightningModule):
         parser.add_argument("--t_eps", type=float, default=0.03, help="The minimum time (3e-2 by default)")
         parser.add_argument("--num_eval_files", type=int, default=10, help="Number of files for speech enhancement performance evaluation during training. Pass 0 to turn off (no checkpoints based on evaluation metrics will be generated).")
         parser.add_argument("--loss_type", type=str, default="mse", help="The type of loss function to use.")
-        parser.add_argument("--loss_abs_exponent", type=float, default= 0.5,  help="magnitude transformation in the loss term")
+        parser.add_argument("--loss_abs_exponent", type=float, default=0.5,  help="magnitude transformation in the loss term")
         return parser
 
     def __init__(
@@ -221,7 +221,7 @@ class ScoreModel(pl.LightningModule):
         """
         One-call speech enhancement of noisy speech `y`, for convenience.
         """
-        sr=16000
+        sr=8000
         start = time.time()
         T_orig = y.size(1) 
         norm_factor = y.abs().max().item()
@@ -253,4 +253,3 @@ class ScoreModel(pl.LightningModule):
         else:
             return x_hat
              
-        

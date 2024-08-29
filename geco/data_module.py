@@ -20,15 +20,22 @@ def get_window(window_type, window_length):
 
 
 class Specs(Dataset):
-    def __init__(self, data_dir, dummy, shuffle_spec, num_frames, sampling_rate=16000,
+    def __init__(self, data_dir, dummy, shuffle_spec, num_frames, sampling_rate=8000,
             format='default', normalize="noisy", spec_transform=None,
             stft_kwargs=None, **ignored_kwargs):
 
         # Read file paths according to file naming format.
         if format == "default":
-            self.clean_files = sorted(glob(os.path.join(data_dir, '*_ref.wav')))
-            self.noisy_files = [item.replace('_ref.wav', '_pred.wav') for item in self.clean_files]
-            self.mixture_files = [item.replace('_ref.wav', '_mix.wav') for item in self.clean_files]
+            noisy_files1 = sorted(glob(os.path.join(data_dir, '*_source1hatP.wav')))
+            clean_files1 = [item.replace('_source1hatP.wav', '_source1.wav') for item in noisy_files1]
+            mixture_files1 = [item.replace('_source1hatP.wav', '_mix.wav') for item in noisy_files1]
+            noisy_files2 = sorted(glob(os.path.join(data_dir, '*_source2hatP.wav')))
+            clean_files2 = [item.replace('_source2hatP.wav', '_source2.wav') for item in noisy_files2]
+            mixture_files2 = [item.replace('_source2hatP.wav', '_mix.wav') for item in noisy_files2]
+            
+            self.mixture_files = [*mixture_files1,*mixture_files2]
+            self.noisy_files = [*noisy_files1,*noisy_files2]
+            self.clean_files = [*clean_files1,*clean_files2]
         else:
             # Feel free to add your own directory format
             raise NotImplementedError(f"Directory format {format} unknown!")
@@ -71,6 +78,10 @@ class Specs(Dataset):
                 start = int(np.random.uniform(0, current_len-target_len))
             else:
                 start = int((current_len-target_len)/2)
+                
+            if y[..., start:start+target_len].abs().max() < 0.05:
+                start = 0
+                
             x = x[..., start:start+target_len]
             y = y[..., start:start+target_len]
             m = m[..., start:start+target_len]
@@ -108,14 +119,14 @@ class Specs(Dataset):
 class SpecsDataModule(pl.LightningDataModule):
     @staticmethod
     def add_argparse_args(parser):
-        parser.add_argument("--train_dir", type=str, default='./output-train-100-rotary-good')
-        parser.add_argument("--val_dir", type=str, default='./output-dev-rotary-good')
-        parser.add_argument("--test_dir", type=str, default='./output-test-rotary')
+        parser.add_argument("--train_dir", type=str, default='/export/corpora7/HW/speechbrain/recipes/LibriMix/separation/2025/save/libri2mix-train100')
+        parser.add_argument("--val_dir", type=str, default='/export/corpora7/HW/speechbrain/recipes/LibriMix/separation/2025/save/libri2mix-dev')
+        parser.add_argument("--test_dir", type=str, default='/export/corpora7/HW/speechbrain/recipes/LibriMix/separation/2025/save/libri2mix-test')
         parser.add_argument("--format", type=str, default="default", help="Read file paths according to file naming format.")
-        parser.add_argument("--sampling_rate", type=int, default=16000, help="The sampling rate.")
+        parser.add_argument("--sampling_rate", type=int, default=8000, help="The sampling rate.")
         parser.add_argument("--batch_size", type=int, default=24, help="The batch size. 8 by default.")
-        parser.add_argument("--n_fft", type=int, default=510, help="Number of FFT bins. 510 by default.")   # to assure 256 freq bins
-        parser.add_argument("--hop_length", type=int, default=128, help="Window hop length. 128 by default.")
+        parser.add_argument("--n_fft", type=int, default=254, help="Number of FFT bins. 510 by default.")   # to assure 128 freq bins
+        parser.add_argument("--hop_length", type=int, default=64, help="Window hop length. 128 by default.")
         parser.add_argument("--num_frames", type=int, default=256, help="Number of frames for the dataset. 256 by default.")
         parser.add_argument("--window", type=str, choices=("sqrthann", "hann"), default="hann", help="The window function to use for the STFT. 'hann' by default.")
         parser.add_argument("--num_workers", type=int, default=8, help="Number of workers to use for DataLoaders. 4 by default.")
@@ -127,8 +138,8 @@ class SpecsDataModule(pl.LightningDataModule):
         return parser
 
     def __init__(
-        self, train_dir, val_dir, test_dir, format='default', sampling_rate=16000, batch_size=8,
-        n_fft=510, hop_length=128, num_frames=256, window='hann',
+        self, train_dir, val_dir, test_dir, format='default', sampling_rate=8000, batch_size=8,
+        n_fft=254, hop_length=64, num_frames=256, window='hann',
         num_workers=4, dummy=False, spec_factor=0.15, spec_abs_exponent=0.5,
         gpu=True, normalize='noisy', transform_type="exponent", **kwargs
     ):
