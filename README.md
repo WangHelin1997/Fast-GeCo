@@ -8,6 +8,6 @@ In this paper, we propose a generative correction method to enhance the output o
 ```
 conda create -n geco python=3.8.19
 conda activate geco
-pip install -r requirments.txt
+pip install -r requirements.txt
 ```
 
