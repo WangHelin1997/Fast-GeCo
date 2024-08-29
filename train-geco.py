@@ -91,14 +91,14 @@ if __name__ == '__main__':
           trainer = pl.Trainer.from_argparse_args(
                arg_groups['pl.Trainer'],
                strategy=DDPPlugin(find_unused_parameters=False), logger=logger,
-               log_every_n_steps=10, num_sanity_val_steps=0,max_epochs=20,
+               log_every_n_steps=10, num_sanity_val_steps=0,max_epochs=100,
                callbacks=callbacks
           )
      else:
           trainer = pl.Trainer.from_argparse_args(
           arg_groups['pl.Trainer'],
           strategy=DDPPlugin(find_unused_parameters=False),
-          log_every_n_steps=10, num_sanity_val_steps=0,max_epochs=20,
+          log_every_n_steps=10, num_sanity_val_steps=0,max_epochs=100,
      )
 
      # Train model

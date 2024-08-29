@@ -26,7 +26,7 @@ if __name__ == '__main__':
     parser.add_argument("--type", type=str, default='test', help="Name of destination folder")
     parser.add_argument("--test_dir", type=str, default='/export/corpora7/HW/speechbrain/recipes/LibriMix/separation/2025/save/libri2mix-test', help='Directory containing the test data')
     parser.add_argument("--ckpt", type=str, default='./logs/z1u7rmzd/epoch=7-si_sdr=9.44.ckpt', help='Path to model checkpoint.')
-    parser.add_argument("--reverse_starting_point", type=float, default=1.0, help="Starting point for the reverse SDE.")
+    parser.add_argument("--reverse_starting_point", type=float, default=0.5, help="Starting point for the reverse SDE.")
     parser.add_argument("--N", type=int, default=1, help="Number of reverse steps")
     parser.add_argument("--debug", type=bool, default=True)
 
