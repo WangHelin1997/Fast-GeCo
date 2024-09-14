@@ -70,8 +70,7 @@ We also provide codes to train and evaluate the SepFormer model, the same as in 
 See [speechbrain](https://github.com/speechbrain) for more details of training and test.
 
 ## License
-The codebase is under [MIT LICENSE](./LICENSE). Note that we use some of the code from other repository that are under different licenses: `./models/modules`, `./steps/optim.py`, `data/tokenizer.py` are under Apache License, Version 2.0; the phonemizer we used is under GNU 3.0 License.
-
+The codebase is under [MIT LICENSE](./LICENSE). 
 
 ## Citations & References
 We kindly ask you to cite our paper in your publication when using any of our research or code:
