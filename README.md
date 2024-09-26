@@ -39,14 +39,14 @@ Here,  `*_mix.wav` is the mixture audio, `*_source1.wav` is the grouth truth aud
 with 1 GPU, run:
 
 ```
-CUDA_VISIBLE_DEVICES=0 python train_geco.py --gpus 1 --batch_size 16
+CUDA_VISIBLE_DEVICES=0 python train-geco.py --gpus 1 --batch_size 16
 ```
 
 ## Train Fast-GeCo
 with 1 GPU, run:
 
 ```
-CUDA_VISIBLE_DEVICES=0 python train_fastgeco.py --gpus 1 --batch_size 32
+CUDA_VISIBLE_DEVICES=0 python train-fastgeco.py --gpus 1 --batch_size 32
 ```
 
 ## Evaluate GeCo
