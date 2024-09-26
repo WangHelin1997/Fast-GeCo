@@ -60,7 +60,7 @@ class NCSNpp(nn.Module):
         progressive_combine = 'sum',
         init_scale = 0.,
         fourier_scale = 16,
-        image_size = 128,
+        image_size = 256,
         embedding_type = 'fourier',
         dropout = .0,
         **unused_kwargs
