@@ -17,7 +17,7 @@
 """Layers for defining NCSN++.
 """
 from . import layers
-from . import up_or_down_sampling
+import score_models.layers.up_or_downsampling2d as up_or_down_sampling
 import torch.nn as nn
 import torch
 import torch.nn.functional as F
@@ -91,76 +91,76 @@ class AttnBlockpp(nn.Module):
       return (x + h) / np.sqrt(2.)
 
 
-class Upsample(nn.Module):
-  def __init__(self, in_ch=None, out_ch=None, with_conv=False, fir=False,
-               fir_kernel=(1, 3, 3, 1)):
-    super().__init__()
-    out_ch = out_ch if out_ch else in_ch
-    if not fir:
-      if with_conv:
-        self.Conv_0 = conv3x3(in_ch, out_ch)
-    else:
-      if with_conv:
-        self.Conv2d_0 = up_or_down_sampling.Conv2d(in_ch, out_ch,
-                                                 kernel=3, up=True,
-                                                 resample_kernel=fir_kernel,
-                                                 use_bias=True,
-                                                 kernel_init=default_init())
-    self.fir = fir
-    self.with_conv = with_conv
-    self.fir_kernel = fir_kernel
-    self.out_ch = out_ch
+# class Upsample(nn.Module):
+#   def __init__(self, in_ch=None, out_ch=None, with_conv=False, fir=False,
+#                fir_kernel=(1, 3, 3, 1)):
+#     super().__init__()
+#     out_ch = out_ch if out_ch else in_ch
+#     if not fir:
+#       if with_conv:
+#         self.Conv_0 = conv3x3(in_ch, out_ch)
+#     else:
+#       if with_conv:
+#         self.Conv2d_0 = up_or_down_sampling.Conv2d(in_ch, out_ch,
+#                                                  kernel=3, up=True,
+#                                                  resample_kernel=fir_kernel,
+#                                                  use_bias=True,
+#                                                  kernel_init=default_init())
+#     self.fir = fir
+#     self.with_conv = with_conv
+#     self.fir_kernel = fir_kernel
+#     self.out_ch = out_ch
 
-  def forward(self, x):
-    B, C, H, W = x.shape
-    if not self.fir:
-      h = F.interpolate(x, (H * 2, W * 2), 'nearest')
-      if self.with_conv:
-        h = self.Conv_0(h)
-    else:
-      if not self.with_conv:
-        h = up_or_down_sampling.upsample_2d(x, self.fir_kernel, factor=2)
-      else:
-        h = self.Conv2d_0(x)
+#   def forward(self, x):
+#     B, C, H, W = x.shape
+#     if not self.fir:
+#       h = F.interpolate(x, (H * 2, W * 2), 'nearest')
+#       if self.with_conv:
+#         h = self.Conv_0(h)
+#     else:
+#       if not self.with_conv:
+#         h = up_or_down_sampling.upsample_2d(x, self.fir_kernel, factor=2)
+#       else:
+#         h = self.Conv2d_0(x)
 
-    return h
+#     return h
 
 
-class Downsample(nn.Module):
-  def __init__(self, in_ch=None, out_ch=None, with_conv=False, fir=False,
-               fir_kernel=(1, 3, 3, 1)):
-    super().__init__()
-    out_ch = out_ch if out_ch else in_ch
-    if not fir:
-      if with_conv:
-        self.Conv_0 = conv3x3(in_ch, out_ch, stride=2, padding=0)
-    else:
-      if with_conv:
-        self.Conv2d_0 = up_or_down_sampling.Conv2d(in_ch, out_ch,
-                                                 kernel=3, down=True,
-                                                 resample_kernel=fir_kernel,
-                                                 use_bias=True,
-                                                 kernel_init=default_init())
-    self.fir = fir
-    self.fir_kernel = fir_kernel
-    self.with_conv = with_conv
-    self.out_ch = out_ch
+# class Downsample(nn.Module):
+#   def __init__(self, in_ch=None, out_ch=None, with_conv=False, fir=False,
+#                fir_kernel=(1, 3, 3, 1)):
+#     super().__init__()
+#     out_ch = out_ch if out_ch else in_ch
+#     if not fir:
+#       if with_conv:
+#         self.Conv_0 = conv3x3(in_ch, out_ch, stride=2, padding=0)
+#     else:
+#       if with_conv:
+#         self.Conv2d_0 = up_or_down_sampling.Conv2d(in_ch, out_ch,
+#                                                  kernel=3, down=True,
+#                                                  resample_kernel=fir_kernel,
+#                                                  use_bias=True,
+#                                                  kernel_init=default_init())
+#     self.fir = fir
+#     self.fir_kernel = fir_kernel
+#     self.with_conv = with_conv
+#     self.out_ch = out_ch
 
-  def forward(self, x):
-    B, C, H, W = x.shape
-    if not self.fir:
-      if self.with_conv:
-        x = F.pad(x, (0, 1, 0, 1))
-        x = self.Conv_0(x)
-      else:
-        x = F.avg_pool2d(x, 2, stride=2)
-    else:
-      if not self.with_conv:
-        x = up_or_down_sampling.downsample_2d(x, self.fir_kernel, factor=2)
-      else:
-        x = self.Conv2d_0(x)
+#   def forward(self, x):
+#     B, C, H, W = x.shape
+#     if not self.fir:
+#       if self.with_conv:
+#         x = F.pad(x, (0, 1, 0, 1))
+#         x = self.Conv_0(x)
+#       else:
+#         x = F.avg_pool2d(x, 2, stride=2)
+#     else:
+#       if not self.with_conv:
+#         x = up_or_down_sampling.downsample_2d(x, self.fir_kernel, factor=2)
+#       else:
+#         x = self.Conv2d_0(x)
 
-    return x
+#     return x
 
 
 class ResnetBlockDDPMpp(nn.Module):

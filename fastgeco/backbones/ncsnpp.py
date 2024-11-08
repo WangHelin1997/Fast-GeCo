@@ -14,7 +14,7 @@
 # limitations under the License.
 
 # pylint: skip-file
-
+from score_models.layers import UpsampleLayer, DownsampleLayer
 from .ncsnpp_utils import layers, layerspp, normalization
 import torch.nn as nn
 import functools
@@ -60,7 +60,7 @@ class NCSNpp(nn.Module):
         progressive_combine = 'sum',
         init_scale = 0.,
         fourier_scale = 16,
-        image_size = 256,
+        image_size = 128,
         embedding_type = 'fourier',
         dropout = .0,
         **unused_kwargs
@@ -120,21 +120,21 @@ class NCSNpp(nn.Module):
         AttnBlock = functools.partial(layerspp.AttnBlockpp,
             init_scale=init_scale, skip_rescale=skip_rescale)
 
-        Upsample = functools.partial(layerspp.Upsample,
+        Upsample = functools.partial(UpsampleLayer,
             with_conv=resamp_with_conv, fir=fir, fir_kernel=fir_kernel)
 
         if progressive == 'output_skip':
-            self.pyramid_upsample = layerspp.Upsample(fir=fir, fir_kernel=fir_kernel, with_conv=False)
+            self.pyramid_upsample = UpsampleLayer(fir=fir, fir_kernel=fir_kernel, with_conv=False)
         elif progressive == 'residual':
-            pyramid_upsample = functools.partial(layerspp.Upsample, fir=fir,
+            pyramid_upsample = functools.partial(UpsampleLayer, fir=fir,
                 fir_kernel=fir_kernel, with_conv=True)
 
-        Downsample = functools.partial(layerspp.Downsample, with_conv=resamp_with_conv, fir=fir, fir_kernel=fir_kernel)
+        Downsample = functools.partial(DownsampleLayer, with_conv=resamp_with_conv, fir=fir, fir_kernel=fir_kernel)
 
         if progressive_input == 'input_skip':
-            self.pyramid_downsample = layerspp.Downsample(fir=fir, fir_kernel=fir_kernel, with_conv=False)
+            self.pyramid_downsample = DownsampleLayer(fir=fir, fir_kernel=fir_kernel, with_conv=False)
         elif progressive_input == 'residual':
-            pyramid_downsample = functools.partial(layerspp.Downsample,
+            pyramid_downsample = functools.partial(DownsampleLayer,
                 fir=fir, fir_kernel=fir_kernel, with_conv=True)
 
         if resblock_type == 'ddpm':
