@@ -17,6 +17,17 @@ conda activate geco
 pip install -r requirements.txt
 ```
 
+You also need to install:
+```
+pip install score_models
+```
+Or
+```
+cd score_models
+pip install -e .
+```
+
+
 ## Data Preparation
 
 To train GeCo or Fast-GeCo, you should prepare a data folder in the following way:
