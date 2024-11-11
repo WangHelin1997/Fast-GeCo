@@ -19,17 +19,17 @@ import matplotlib.pyplot as plt
 class ScoreModel(pl.LightningModule):
     @staticmethod
     def add_argparse_args(parser):
-        parser.add_argument("--lr", type=float, default=5e-4, help="The learning rate (1e-4 by default)")
+        parser.add_argument("--lr", type=float, default=1e-4, help="The learning rate (1e-4 by default)")
         parser.add_argument("--ema_decay", type=float, default=0.999, help="The parameter EMA decay constant (0.999 by default)")
         parser.add_argument("--t_eps", type=float, default=0.03, help="The minimum time (3e-2 by default)")
-        parser.add_argument("--num_eval_files", type=int, default=10, help="Number of files for speech enhancement performance evaluation during training. Pass 0 to turn off (no checkpoints based on evaluation metrics will be generated).")
+        parser.add_argument("--num_eval_files", type=int, default=20, help="Number of files for speech enhancement performance evaluation during training. Pass 0 to turn off (no checkpoints based on evaluation metrics will be generated).")
         parser.add_argument("--loss_type", type=str, default="mse", help="The type of loss function to use.")
         parser.add_argument("--loss_abs_exponent", type=float, default=0.5,  help="magnitude transformation in the loss term")
         return parser
 
     def __init__(
         self, backbone, sde, lr=1e-4, ema_decay=0.999, t_eps=3e-2, loss_abs_exponent=0.5, 
-        num_eval_files=10, loss_type='mse', data_module_cls=None, **kwargs
+        num_eval_files=20, loss_type='mse', data_module_cls=None, **kwargs
     ):
         """
         Create a new ScoreModel.

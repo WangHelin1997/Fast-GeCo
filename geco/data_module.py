@@ -124,9 +124,9 @@ class SpecsDataModule(pl.LightningDataModule):
         parser.add_argument("--test_dir", type=str, default='/export/corpora7/HW/speechbrain/recipes/LibriMix/separation/2025/save/libri2mix-test')
         parser.add_argument("--format", type=str, default="default", help="Read file paths according to file naming format.")
         parser.add_argument("--sampling_rate", type=int, default=8000, help="The sampling rate.")
-        parser.add_argument("--batch_size", type=int, default=24, help="The batch size. 8 by default.")
+        parser.add_argument("--batch_size", type=int, default=16, help="The batch size. 8 by default.")
         parser.add_argument("--n_fft", type=int, default=510, help="Number of FFT bins. 510 by default.")   # to assure 128 freq bins
-        parser.add_argument("--hop_length", type=int, default=128, help="Window hop length. 128 by default.")
+        parser.add_argument("--hop_length", type=int, default=64, help="Window hop length. 128 by default.")
         parser.add_argument("--num_frames", type=int, default=256, help="Number of frames for the dataset. 256 by default.")
         parser.add_argument("--window", type=str, choices=("sqrthann", "hann"), default="hann", help="The window function to use for the STFT. 'hann' by default.")
         parser.add_argument("--num_workers", type=int, default=8, help="Number of workers to use for DataLoaders. 4 by default.")

@@ -23,14 +23,14 @@ def get_argparse_groups(parser):
 
 if __name__ == '__main__':
      parser = ArgumentParser()
-     parser.add_argument("--batch_size", type=int, default=32,  help="During training take at least N_min reverse steps")
+     parser.add_argument("--batch_size", type=int, default=16,  help="During training take at least N_min reverse steps")
      parser.add_argument("--N_min", type=int, default=1,  help="During training take at least N_min reverse steps")
      parser.add_argument("--N_max", type=int, default=1,  help="During training take at most N_max reverse steps")
      parser.add_argument("--t_rsp_min", type=float, default=0.5,  help="During training take at least N_min reverse steps")
      parser.add_argument("--t_rsp_max", type=float, default=0.5,  help="During training take at most N_max reverse steps")
      parser.add_argument("--pre_ckpt", type=str, default='./logs/u0kwl5bj/epoch=13-si_sdr=8.10.ckpt',  help="Load ckpt")
      parser.add_argument("--nolog", action='store_true', help="Turn off logging (for development purposes)")
-     parser.add_argument("--lr", type=float, default=5e-5, help="The learning rate (1e-4 by default)")
+     parser.add_argument("--lr", type=float, default=1e-5, help="The learning rate (1e-4 by default)")
      parser.add_argument("--loss_type", type=str, default="default", help="The type of loss function to use.")
      parser.add_argument("--stop_iteration_random", type=str, choices=['random', 'last', 'epoch', 'residual_mag'], default="last", help="0 means it is fix, 1 means random stop iterations")
      parser.add_argument("--inference_N", type=int, default=1, help="inference N")
