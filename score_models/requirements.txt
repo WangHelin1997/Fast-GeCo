@@ -1,0 +1,6 @@
+torch>=2.0
+numpy
+h5py
+torch_ema
+scipy
+tqdm
