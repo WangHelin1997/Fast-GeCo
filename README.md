@@ -83,14 +83,14 @@ The codebase is under [MIT LICENSE](./LICENSE).
 We kindly ask you to cite our paper in your publication when using any of our research or code:
 
 ```
-misc{wang2024noiserobustspeechseparationfast,
-      title={Noise-robust Speech Separation with Fast Generative Correction}, 
-      author={Helin Wang and Jesus Villalba and Laureano Moro-Velazquez and Jiarui Hai and Thomas Thebaud and Najim Dehak},
-      year={2024},
-      eprint={2406.07461},
-      archivePrefix={arXiv},
-      primaryClass={eess.AS},
-      url={https://arxiv.org/abs/2406.07461}, 
+@inproceedings{wang24i_interspeech,
+  title     = {Noise-robust Speech Separation with Fast Generative Correction},
+  author    = {Helin Wang and Jesús Villalba and Laureano Moro-Velazquez and Jiarui Hai and Thomas Thebaud and Najim Dehak},
+  year      = {2024},
+  booktitle = {Interspeech 2024},
+  pages     = {2165--2169},
+  doi       = {10.21437/Interspeech.2024-327},
+  issn      = {2958-1796},
 }
 ```
 
