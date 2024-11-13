@@ -7,7 +7,8 @@ In this paper, we propose a generative correction method to enhance the output o
 
 
 ## NEWS & TODO
-Huggingface demos and pretrained models will be released soon!
+- [x] Release model weights and inference code
+- [ ] HuggingFace Spaces demo
 
 ## Environment setup
 
@@ -21,6 +22,25 @@ You also need to install:
 ```
 cd score_models
 pip install -e .
+```
+
+## Inference examples
+
+To inference with SepFormer and Fast-GeCo, please install `speechbrain`:
+
+```bash
+pip install speechbrain==1.0.0
+```
+
+Then download our pretrained models on [Huggingface](https://huggingface.co/westbrook/Fast-GeCo/) and run:
+
+```bash
+python test-demo.py  \
+    --test_file '' \
+    --save_name '' \
+    --save_folder '' \
+    --sepformer_ckpt 'YOUR_MODEL_PATH' \
+    --fastgeco_ckpt ''
 ```
 
 
@@ -45,27 +65,27 @@ Here,  `*_mix.wav` is the mixture audio, `*_source1.wav` is the grouth truth aud
 ## Train GeCo
 with 1 GPU, run:
 
-```
+```bash
 CUDA_VISIBLE_DEVICES=0 python train-geco.py --gpus 1 --batch_size 16
 ```
 
 ## Train Fast-GeCo
 with 1 GPU, run:
 
-```
+```bash
 CUDA_VISIBLE_DEVICES=0 python train-fastgeco.py --gpus 1 --batch_size 32
 ```
 
 ## Evaluate GeCo
 
-```
+```bash
 CUDA_VISIBLE_DEVICES=0 python eval-geco.py
 ```
 
 
 ## Evaluate Fast-GeCo
 
-```
+```bash
 CUDA_VISIBLE_DEVICES=0 python eval-fastgeco.py
 ```
 
