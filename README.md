@@ -23,6 +23,10 @@ You also need to install:
 cd score_models
 pip install -e .
 ```
+Or
+```
+pip install git+https://github.com/WangHelin1997/Fast-GeCo.git#subdirectory=score_models
+```
 
 ## Inference examples
 
