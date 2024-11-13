@@ -35,7 +35,7 @@ pip install speechbrain==1.0.0
 Then download our pretrained models on [Huggingface](https://huggingface.co/westbrook/Fast-GeCo/) and run:
 
 ```bash
-python test-demo.py  \
+python inference.py  \
     --test_file '' \
     --save_name '' \
     --save_folder '' \
