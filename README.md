@@ -36,11 +36,10 @@ Then download our pretrained models on [Huggingface](https://huggingface.co/west
 
 ```bash
 python inference.py  \
-    --test_file '' \
-    --save_name '' \
-    --save_folder '' \
-    --sepformer_ckpt 'YOUR_MODEL_PATH' \
-    --fastgeco_ckpt ''
+    --test_file 'demo/item0_mix.wav' \
+    --save_name 'item0' \
+    --save_folder 'output_demo' \
+    --ckpt 'YOUR_MODEL_PATH'
 ```
 
 
