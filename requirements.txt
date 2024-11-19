@@ -16,3 +16,4 @@ pesq
 wandb
 PySoundFile
 pandas
+git+https://github.com/WangHelin1997/Fast-GeCo.git#subdirectory=score_models
