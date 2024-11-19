@@ -21,16 +21,6 @@ conda activate geco
 pip install -r requirements.txt
 ```
 
-You also need to install:
-```
-cd score_models
-pip install -e .
-```
-Or
-```
-pip install git+https://github.com/WangHelin1997/Fast-GeCo.git#subdirectory=score_models
-```
-
 ## Inference examples
 
 To inference with SepFormer and Fast-GeCo, please install `speechbrain`:
